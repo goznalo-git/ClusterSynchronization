@@ -5,6 +5,9 @@ using LinearAlgebra
 using Statistics
 using DelimitedFiles
 
+####################################
+########## LOADING INPUTS ##########
+####################################
 
 # Load the appropriate adjacency matrix and convert it to Laplacian
 #file1 = matread("Input/A_PowerGrid.mat");
@@ -24,13 +27,10 @@ sparseL = sparse(Lij);
 file2 = matread("Input/initc_Rossler.mat");
 initc   = file2["initc"];
 
-# In case of the 10% heterogeneity in variables a, b, c; 
-# the values per node were already generated and saved in the corresponding files.
-#het_b = vec(readdlm("Input/het_b.txt"));  
-# If this is used, then the rossler!() function must be adapted accordingly.
 
-nth = Threads.nthreads()
-println(nth);
+##########################################
+########## ESTABLISH PARAMETERS ##########
+##########################################
 
 
 # Parameters and initial conditions
@@ -40,11 +40,20 @@ y0 = initc[2] .+ 0.01*rand(N);
 z0 = initc[3] .+ 0.01*rand(N);
 u0 = [x0 y0 z0];
 
-length=200
+length = 200 # Number of couplings (lambda) to calculate over 
 lambdas = range(0, 0.2, length = length)
 
 
-# ODE 
+# Check the number of threads available for the parallelization
+nth = Threads.nthreads()
+println(nth);
+
+
+##########################################
+########## EQUATIONS AND SOLVER ##########
+##########################################
+
+# Establish ODE 
 function rossler!(du, u, lambda, t, a=0.1, b=0.1, c=18)
     coupling = similar(y0);
     mul!(coupling, sparseL, u[:,2]);
@@ -56,18 +65,25 @@ prob = ODEProblem(rossler!,u0,[0 1000],1.0);
 
 
 println("Ensemble")
-# Remake simulatons varying a parameter: lambda
+# Remake simulatons varying a parameter (lambda), in parallel
 function prob_func(prob, i, repeat);
     remake(prob, p = [lambdas[i]]);
 end
 
-# Solve the ODE calling the "remake"
+
+# Solve the ODE in parallel calling the "remake" above
 ensemble_prob = EnsembleProblem(prob, prob_func=prob_func);
 sim = solve(ensemble_prob, Tsit5(), EnsembleThreads(), saveat = 900:0.25:1000, trajectories=length, maxiters = 1e5);
 
-# Keep the y coordinate
+
+# Keep only the y coordinate
 sim = copy(sim[:,2,:,:]);
 
+
+
+######################################
+########## COMPUTING ERRORS ##########
+######################################
 
 # List of cluster indices
 ind1 = [1,2,3];
@@ -87,7 +103,7 @@ function ClusterError(soly);
 end
 
 
-# For each value of lambda, compute the cluster errors
+# Function computing the cluster error and total error of a single simulation
 function clusynch(lam);
 
     # Error Synch Cluster 1
@@ -112,13 +128,14 @@ function clusynch(lam);
     return Err1, Err2, Err3, ErrT;
 end
 
+
 # Initialize cluster error vectors
 x1 = Vector{Float64}()
 x2 = Vector{Float64}()
 x3 = Vector{Float64}()
 xT = Vector{Float64}()
 
-
+# For each value of lambda, append the cluster errors
 for lam in 1:length;
 
     Err1, Err2, Err3, ErrT = clusynch(lam)
@@ -128,9 +145,16 @@ for lam in 1:length;
     append!(xT,ErrT)
 end
 
+
+
+########################################
+########## SAVING THE RESULTS ##########
+########################################
+
 Synch = [x1; x2; x3; xT];
 
+# Each different simulation is indexed by a random number
 num = rand(Int)
-open("Output-SmallWeighted/synch_error-$num.txt", "w") do file
+open("Output/synch_error-$num.txt", "w") do file
     writedlm(file, Synch)
 end
