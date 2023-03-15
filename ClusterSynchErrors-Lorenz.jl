@@ -9,13 +9,7 @@ using DelimitedFiles
 ########## LOADING INPUTS ##########
 ####################################
 
-# Load the appropriate adjacency matrix and convert it to Laplacian
-#file1 = matread("Input/A_PowerGrid.mat");
-#Aij = file1["A"];
-#degree_vector = sum(Aij, dims=2);
-#Lij = diagm(vec(degree_vector)) - Aij;
-
-# or load directly the Laplacian matrix
+# Load directly the Laplacian matrix
 file1 = matread("Input/L_SmallWeighted.mat");
 Lij = file1["L"];
 
@@ -23,7 +17,7 @@ Lij = file1["L"];
 sparseL = sparse(Lij);
 
 
-# Load the Rossler/Lorenz initial condition (within the attractor)
+# Load the Lorenz initial condition (within the attractor)
 file2 = matread("Input/initc_Lorenz.mat");
 initc   = file2["initc"];
 
@@ -58,7 +52,7 @@ function lorenz!(du, u, lambda, t, sigma=10, rho=28, beta=2)
     coupling = similar(x0);
     mul!(coupling, sparseL, u[:,1]);
     du[:,1] = sigma * (u[:,2] .- u[:,1]) .- lambda .* coupling;
-    du[:,2] = u[:,1] .* (rho .- u[:,3]) .- u[:,2] 
+    du[:,2] = u[:,1] .* (rho .- u[:,3]) .- u[:,2]; 
     du[:,3] = u[:,1] .* u[:,2] .- beta .* u[:,3]; 
 end
 prob = ODEProblem(lorenz!, u0, [0 1000], 1.0);

@@ -10,20 +10,15 @@ using DelimitedFiles
 ####################################
 
 # Load the appropriate adjacency matrix and convert it to Laplacian
-#file1 = matread("Input/A_PowerGrid.mat");
-#Aij = file1["A"];
-#degree_vector = sum(Aij, dims=2);
-#Lij = diagm(vec(degree_vector)) - Aij;
-
-# or load directly the Laplacian matrix
-file1 = matread("Input/L_SmallWeighted.mat");
-Lij = file1["L"];
+file1 = matread("Input/A_PowerGrid.mat");
+Aij = file1["A"];
+degree_vector = sum(Aij, dims=2);
+Lij = diagm(vec(degree_vector)) - Aij;
 
 #Sparsify the Laplacian matrix
 sparseL = sparse(Lij);
 
-
-# Load the Rossler/Lorenz initial condition (within the attractor)
+# Load the Rossler initial condition (within the attractor)
 file2 = matread("Input/initc_Rossler.mat");
 initc   = file2["initc"];
 
