@@ -6,16 +6,22 @@ using DelimitedFiles
 
 include("Lyapunov_functions.jl")
 
+
+println("Starting the calculation")
+
 # Load the Lorenz initial condition (within the attractor)
 file2 = matread("Input/initc_Rossler.mat");
 initc = file2["initc"];
+
 # Parameters
-a   = 0.1;
-b   = 0.1;
-c   = 18;
+sigma   = 10;
+rho     = 28;
+beta    = 2;
+
+parameters = (sigma, rho, beta)
 
 # Range of coupling
-nu  = 0:0.05:12;
+nulist  = 0:0.5:25;
 
 # Time
 t0      = 0;           # initial t
@@ -30,10 +36,27 @@ frec    = 50;    # frequency at which we measure/calculate the Lyapunov exponent
 Tsample = 15000;       # Late times used for the average
 
 
+
+###########################################
+######## Taken from ChaoticMaps.md ########
+###########################################
+
+function f(t, p, params)
+
+    dx, dy, dz, x, y, z = p
+    sigma, rho, beta, nu = params
+
+    return [sigma * (dy - dx) - nu * dy; (rho - z) * dx - dy - x * dz; y * dx + x * dy - beta * dz;  # error
+                        sigma * (y - x);            x * (rho - z) - y;           x * y - beta * z];  # decoupled 
+end
+
+###########################################
+###########################################
+
 ## Run the program
-explya = LyapExp(nu, initc, t, h, N, frec, Tsample)
+explya = LyapExp(nulist, f, parameters, initc, t, h, N, frec, Tsample)
 
 
-open("Rosslertest.txt", "w") do file
+open("Lorenz2-1.txt", "w") do file
     writedlm(file, explya)
 end
