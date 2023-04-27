@@ -19,7 +19,7 @@ sparseL = sparse(Lij);
 
 # Load the Lorenz initial condition (within the attractor)
 file2 = matread("Input/initc_Lorenz.mat");
-initc   = file2["initc"];
+initc = file2["initc"];
 
 
 ##########################################
