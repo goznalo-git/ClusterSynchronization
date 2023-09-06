@@ -54,3 +54,69 @@ Only a partial list (the ones used in some of our works) are available here.
                             sigma * (y - x);            x * (rho - z) - y;           x * y - beta * z];  # decoupled 
     end
     ```
+
+3. Chen
+
+    - Parameters sets
+    ```julia
+    a = 35;
+    c   = 28;
+    beta  = 8/3;
+    
+    parameters = (a, c, beta)
+    ```
+
+    - Coupling 3 -> 3
+    ```julia
+    function f(t, p, params)
+
+        dx, dy, dz, x, y, z = p
+        sigma, rho, beta, nu = params
+
+        return [a * (dy - dx);  (c - a - z) * dx - dz * x - c * dy; y * dx + x * dy - beta * dz - nu * dz;  # error
+                  a * (y - x);             (c - a - z) * x - c * y;                     x * y - beta * z];  # decoupled 
+    end
+    ```
+
+4. Chua
+
+    - Parameter sets
+    ```julia
+    alpha = 10
+    beta = 14.87
+    gamma = 0
+    a = -1.27
+    b = -0.68
+    
+    parameters = (alpha, beta, gamma, a, b)
+    ```
+
+    - Coupling 3 -> 3
+
+    ```
+    function f(t, p, params)
+        
+        dx, dy, dz, x, y, z = p
+        alpha, beta, gamma, a, b = params
+        
+        if x > 1
+            
+            fx = - b * x - a + b
+            dfx = - b
+
+        elif x < -1
+            
+            fx = - b * x + a - b
+            dfx = - b
+
+        else
+            
+            fx = - a * x
+            dfx = - a
+
+        end
+
+        return [alpha * (dy - dx + dfx);  dx - dy + dz; - beta * dy - gamma * dz - beta * dz - nu * dz;  # error
+                  alpha * (y - x);             (c - a - z) * x - c * y;                     x * y - beta * z];  # decoupled 
+    end
+    ```
