@@ -2,7 +2,7 @@
 
 This is the repository hosting some basic scripts and data used in the papers
 - "Endowing networks with desired symmetries and modular behavior". P. Khanra, S. Ghosh, D. Aleja, K. Alfaro-Bittner, G. Contreras-Aso, R. Criado, M. Romance, S. Boccaletti, P. Pal, and C. Hens; [https://arxiv.org/abs/2302.10548](https://arxiv.org/abs/2302.10548).
-- "Predicting and describing the transition to synchronization of networked systems". A. Bayani, F. Nazarimehr, S. Jafari, K. Kovalenko, G. Contreras-Aso, K. Alfaro-Bittner, R.J. Sánchez-Garcı́a, and S. Boccaletti.
+- "The transition to synchronization of networked systems". A. Bayani, F. Nazarimehr, S. Jafari, K. Kovalenko, G. Contreras-Aso, K. Alfaro-Bittner, R.J. Sánchez-Garcı́a, and S. Boccaletti.
 
 ## General information
 
@@ -16,7 +16,7 @@ This repository is not an exact replica of the actual project. By this we mean t
 - `powergrid_variable-b01.json`: USA Power grid network, with Rossler dynamics and coupling on the Y coordinates. 10% heterogeneity in b.
 - `powergrid_variable-c01.json`: USA Power grid network, with Rossler dynamics and coupling on the Y coordinates. 10% heterogeneity in c.
 
-As for the script `ClusterSynchErrors.jl`, it is written in Julia (keep in mind it was our first encounter with such programming language, and learn the bare minimum to carry out this project, so it could be qualified as "spaguetti code"), using some basic scientific libraries (DifferentialEquations, MAT, LinearAlgebra, Statistics...) and making use of multithreading, parallelizing the solver with a different value of the coupling per thread. 
+As for the scripts `ClusterSynchErrors-?????.jl`, both are written in Julia (keep in mind it was our first encounter with such programming language, and learn the bare minimum to carry out this project, so it could be qualified as "spaguetti code"), using some basic scientific libraries (DifferentialEquations, MAT, LinearAlgebra, Statistics...) and making use of multithreading, parallelizing the solver with a different value of the coupling per thread. 
 
 To automatize running the Julia script over and over again, the `batch_senders.sh` bash file can be run using
 ```bash

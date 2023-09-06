@@ -57,7 +57,7 @@ function lorenz!(du, u, lambda, t, sigma=10, rho=28, beta=2)
     du[:,2] = u[:,1] .* (rho .- u[:,3]) .- u[:,2]; 
     du[:,3] = u[:,1] .* u[:,2] .- beta .* u[:,3]; 
 end
-prob = ODEProblem(lorenz!, u0, [0 1000], 1.0);
+prob = ODEProblem(lorenz!, u0, [0 5000], 1.0);
 
 
 println("Ensemble")
@@ -69,7 +69,7 @@ end
 
 # Solve the ODE in parallel calling the "remake" above
 ensemble_prob = EnsembleProblem(prob, prob_func=prob_func);
-sim = solve(ensemble_prob, Tsit5(), EnsembleThreads(), saveat = 900:0.25:1000, trajectories=len, maxiters = 1e5);
+sim = solve(ensemble_prob, Tsit5(), EnsembleThreads(), saveat = 4900:0.25:5000, trajectories=len, maxiters = 1e5);
 
 
 # Keep only the y coordinate
