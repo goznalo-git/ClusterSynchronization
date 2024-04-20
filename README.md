@@ -1,24 +1,23 @@
 # Cluster Synchronization Errors in Julia
 
 This is the repository hosting some basic scripts and data used in the papers
-- "Endowing networks with desired symmetries and modular behavior". P. Khanra, S. Ghosh, D. Aleja, K. Alfaro-Bittner, G. Contreras-Aso, R. Criado, M. Romance, S. Boccaletti, P. Pal, and C. Hens; [https://arxiv.org/abs/2302.10548](https://arxiv.org/abs/2302.10548).
-- "The transition to synchronization of networked systems". A. Bayani, F. Nazarimehr, S. Jafari, K. Kovalenko, G. Contreras-Aso, K. Alfaro-Bittner, R.J. Sánchez-Garcı́a, and S. Boccaletti.
+- "Endowing networks with desired symmetries and modular behavior". P. Khanra, S. Ghosh, D. Aleja, K. Alfaro-Bittner, G. Contreras-Aso, R. Criado, M. Romance, S. Boccaletti, P. Pal, and C. Hens; [Phys. Rev. E 108, 054309 (2023)](https://doi.org/10.1103/PhysRevE.108.054309).
+- "The transition to synchronization of networked systems". A. Bayani, F. Nazarimehr, S. Jafari, K. Kovalenko, G. Contreras-Aso, K. Alfaro-Bittner, R.J. Sánchez-Garcı́a, and S. Boccaletti; [arXiv:2303.08668](https://doi.org/10.48550/arXiv.2303.08668)
 
 ## General information
 
-This repository is not an exact replica of the actual project. By this we mean that the scripts can't be run "as is", and the data shown here is not the one directly obtained by running the scripts. Instead, the data files in `Data_all_simulations` contain the already pre-processed (essentially averaged) values of the synchronization errors per cluster of each simulation, namely:
-- `smallweighted_lorenz.json`: N=10 fully connected, weighted network, with Lorenz dynamics and coupling on the X coordinates.
-- `smallweighted_rossler.json`: N=10 fully connected, weighted network, with Rossler dynamics and coupling on the Y coordinates.
-- `synth_network_1000.json`: N=1.000 synthetic network, with Rossler dynamics and coupling on the Y coordinates.
-- `synth_network_10000.json`: N=10.000 synthetic network, with Rossler dynamics and coupling on the Y coordinates.
-- `real_network_powergrid.json`: USA Power grid network, with Rossler dynamics and coupling on the Y coordinates. a,b,c fixed.
-- `powergrid_variable-a01.json`: USA Power grid network, with Rossler dynamics and coupling on the Y coordinates. 10% heterogeneity in a.
-- `powergrid_variable-b01.json`: USA Power grid network, with Rossler dynamics and coupling on the Y coordinates. 10% heterogeneity in b.
-- `powergrid_variable-c01.json`: USA Power grid network, with Rossler dynamics and coupling on the Y coordinates. 10% heterogeneity in c.
+The repository is structured as follows:
 
-As for the scripts `ClusterSynchErrors-?????.jl`, both are written in Julia (keep in mind it was our first encounter with such programming language, and learn the bare minimum to carry out this project, so it could be qualified as "spaguetti code"), using some basic scientific libraries (DifferentialEquations, MAT, LinearAlgebra, Statistics...) and making use of multithreading, parallelizing the solver with a different value of the coupling per thread. 
+- Folder `SynchronizationErrors` contains the scripts necessary for computing the cluster synchronization errors of a given dynamical system over a given network. They are written in Julia using some basic scientific libraries (DifferentialEquations, MAT, LinearAlgebra, Statistics...) and making use of multithreading, parallelizing the solver with a different value of the coupling per thread.
+  - The `ClusterSynchErrors-*.jl` scripts can be modified with the desired dynamical system and network, and then run.
+  - The `class*dynamics.jl` contains a collection of possible dynamical systems to consider, already formatted appropriately.
+  - To automatize running the Julia script over and over again, the `batch_senders.sh` bash file can be run using
+  ```bash
+  nohup ./batch_senders.sh &
+  ```
 
-To automatize running the Julia script over and over again, the `batch_senders.sh` bash file can be run using
-```bash
-nohup ./batch_senders.sh &
-```
+- Folder `Input` contains adjacency and/or Laplacian matrices of some networks, as well as initial conditions (close to the respective attractors).
+
+- The data files in `Data_all_simulations` contain the already pre-processed (averaged) values of the synchronization errors per cluster of each simulation shown in the aforementioned papers.
+
+- Folder `LyapunovExpCalculation` contains scripts which can be run to compute the Master Stability Function (maximum Lyapunov exponent) of a given dynamical system, along with examples of them. 
