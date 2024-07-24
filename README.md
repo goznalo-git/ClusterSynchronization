@@ -2,7 +2,7 @@
 
 This is the repository hosting some basic scripts and data used in the papers
 - "Endowing networks with desired symmetries and modular behavior". P. Khanra, S. Ghosh, D. Aleja, K. Alfaro-Bittner, G. Contreras-Aso, R. Criado, M. Romance, S. Boccaletti, P. Pal, and C. Hens; [Phys. Rev. E 108, 054309 (2023)](https://doi.org/10.1103/PhysRevE.108.054309).
-- "The transition to synchronization of networked systems". A. Bayani, F. Nazarimehr, S. Jafari, K. Kovalenko, G. Contreras-Aso, K. Alfaro-Bittner, R.J. Sánchez-Garcı́a, and S. Boccaletti; [arXiv:2303.08668](https://doi.org/10.48550/arXiv.2303.08668)
+- "The transition to synchronization of networked systems". A. Bayani, F. Nazarimehr, S. Jafari, K. Kovalenko, G. Contreras-Aso, K. Alfaro-Bittner, R.J. Sánchez-Garcı́a, and S. Boccaletti; [Nat. Comm. 15, 4955 (2024)]([https://doi.org/10.48550/arXiv.2303.08668](https://doi.org/10.1038/s41467-024-48203-6))
 
 ## General information
 
